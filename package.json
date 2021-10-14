@@ -1,11 +1,14 @@
 {
   "name": "iot-project",
-  "version": "1.0.0",
-  "description": "Light sensor project",
+  "version": "0.0.1",
+  "description": "Determine trespassing with a light sensor and a laser pointer",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "juhito",
+  "license": "ISC",
+  "dependencies": {
+    "serialport": "^9.2.4"
+  }
 }
