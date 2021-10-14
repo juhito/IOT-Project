@@ -6,8 +6,16 @@ We are using a light sensor and a laser pointer to determine if an area was tres
 
 This git page is only for the code in which we make the connection to the sensor and receive and send data forward.
 
+# Requirements
+- Light sensor from Techat Oy
+- Drivers from https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers
+    - Drivers are required for device operation as a Virtual COM Port to facilitate host communication with CP210x products.
+- Node.js v14
+- Currently only tested on Windows powered machine.
+
 # Technologies
 - Node.js
+    - https://www.npmjs.com/package/serialport
 - REST
 - Wapice IOT-Ticket
 
