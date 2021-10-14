@@ -24,6 +24,7 @@ This git page is only for the code in which we make the connection to the sensor
 # Hardware
 - Laptop
 - Light Sensor from Techat Oy
+- Wireless Dongle from Techat Oy
 - Laser pointer
 
 # Example
