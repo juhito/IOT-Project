@@ -23,3 +23,13 @@ This git page is only for the code in which we make the connection to the sensor
 - Laptop
 - Light Sensor from Techat Oy
 - Laser pointer
+
+# Example
+Sending a hex sequence to the device
+```sh
+device.write([0x3C, 0x01, 0x3E])
+```
+Received Data is between 0-1023 on register 0x01
+```sh
+120
+```
