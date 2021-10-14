@@ -17,7 +17,7 @@ This git page is only for the code in which we make the connection to the sensor
 
 # Technologies
 - Node.js
-    - https://www.npmjs.com/package/serialport
+    - Serialport v9.2.4 (https://www.npmjs.com/package/serialport)
 - REST
 - Wapice IOT-Ticket
 
