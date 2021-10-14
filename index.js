@@ -60,7 +60,7 @@ device.on("data", (data) => {
 // when the connection is ready
 device.on("open", () => {
     // send data as hex sequence
-    device.write([0x3C, 0x09, 0x3E], (err) => {
+    device.write([0x3C, 0x01, 0x3E], (err) => {
         if(err) 
             console.log("Error on write: ", err.message);
     
