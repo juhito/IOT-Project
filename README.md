@@ -7,11 +7,11 @@ We are using a light sensor and a laser pointer to determine if an area was tres
 This git page is only for the code in which we make the connection to the sensor and receive and send data forward.
 
 # Technologies
-Node.js
-REST
-Wapice IOT-Ticket
+- Node.js
+- REST
+- Wapice IOT-Ticket
 
 # Hardware
-Laptop
-Light Sensor from Techat Oy
-Laser pointer
+- Laptop
+- Light Sensor from Techat Oy
+- Laser pointer
