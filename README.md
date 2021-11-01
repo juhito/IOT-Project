@@ -12,8 +12,7 @@ This git page is only for the code in which we make the connection to the sensor
 - Light sensor from Techat Oy
 - Drivers from https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers
     - Drivers are required for device operation as a Virtual COM Port to facilitate host communication with CP210x products.
-- Node.js v14
-- Currently only tested on Windows powered machine.
+- System with Nodejs v14 and Internet Connection.
 
 # Technologies
 - Node.js
