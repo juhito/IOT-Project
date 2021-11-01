@@ -5,10 +5,11 @@
   "description": "Determine trespassing with a light sensor and a laser pointer",
   "main": "index.js",
   "scripts": {
+    "dev": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "juhito",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "dotenv": "^10.0.0",
     "node-fetch": "^3.0.0",
