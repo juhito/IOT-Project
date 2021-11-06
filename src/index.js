@@ -39,6 +39,33 @@ Register 0x09 -> [0x3C, 0x09, 0x3E]
     Prints the info
 
 */
+/*
+
+Writing Data
+
+The user must write the provided values to the corresponding data node. Subsequent writings always include 
+the same name and path to write to the same data node. 
+
+Name -> A short description of the datanode. A device’s datanode is uniquely identified with its name and path. 
+        The value is case insensitive.
+
+V -> The value to be written. This must be applicable to the datatype, if provided.
+
+dataType -> When the datatype is not provided, the possible data type is inferred from the value first received by the server.
+
+unit -> The unit associated with the data, preferably 1 or 2 characters.
+
+ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timestamp is missing, the current timestamp is automatically used.
+
+{
+    "name": "Latitude",
+    "v": 63,
+    "ts": 1414488510057,
+    "unit": "c",
+    "dataType": "long" 
+},
+
+*/
 
 
 // import the required library to make serial connections
@@ -71,7 +98,7 @@ const readSerialData = (data) => {
 }
 
 const analyzeSerialData = () => {
-    if(parseInt(tempString) < 100) console.log("Data lower than 100: " + tempString);
+    if(tempString != "" && parseInt(tempString) < 100) console.log("Data lower than 100: " + tempString);
     tempString = "";
 }
 
