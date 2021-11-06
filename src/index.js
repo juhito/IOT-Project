@@ -53,24 +53,34 @@ const device = new serial("COM3", {
     stopBits: 1
 });
 
+const intervalRate = 1000;
+const hexData = [0x3C, 0x01, 0x3E];
+
 let tempString = "";
 let dataInterval;
 
 const portOpen = () => {
     console.log("Connection is now ready!");
     dataInterval = setInterval(() => {
-        writeSerialData([0x3C, 0x01, 0x3E]);
-    }, 1000);
+        writeSerialData();
+    }, intervalRate);
 }
 
 const readSerialData = (data) => {
     tempString = tempString.concat('', data.toString());
-    console.log(tempString);
 }
 
-const writeSerialData = (hexArray) => {
-    device.write(hexArray, (err) => {
+const analyzeSerialData = () => {
+    if(parseInt(tempString) < 100) console.log("Data lower than 100: " + tempString);
+    tempString = "";
+}
+
+const writeSerialData = () => {
+    analyzeSerialData();
+    
+    device.write(hexData, (err) => {
         if(err) console.log(err);
+        console.log("message written");
     });
 }
 
