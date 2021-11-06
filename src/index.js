@@ -70,6 +70,7 @@ ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timesta
 
 // import the required library to make serial connections
 import serial from "serialport";
+import dotenv from "dotenv/config";
 import { getData, postData } from "./connect.js";
 
 // instantiate connection to the device
@@ -81,7 +82,9 @@ const device = new serial("COM3", {
 });
 
 const intervalRate = 1000;
+const threshold = 100;
 const hexData = [0x3C, 0x01, 0x3E];
+const deviceId = process.env.WAPICE_DEVICEID;
 
 let tempString = "";
 let dataInterval;
@@ -97,8 +100,19 @@ const readSerialData = (data) => {
     tempString = tempString.concat('', data.toString());
 }
 
-const analyzeSerialData = () => {
-    if(tempString != "" && parseInt(tempString) < 100) console.log("Data lower than 100: " + tempString);
+const analyzeSerialData = async () => {
+    if(tempString != "" && parseInt(tempString) < threshold) {
+        console.log("Data lower than 100: " + tempString);
+
+        const response = await postData(`process/write/${deviceId}`, [{
+            "name": "Light Intensity",
+            "v": parseInt(tempString),
+            "unit": "cd",
+            "dataType": "double"
+        }]);
+
+        console.log(response);
+    }
     tempString = "";
 }
 
