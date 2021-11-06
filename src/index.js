@@ -54,6 +54,7 @@ const device = new serial("COM3", {
 });
 
 let tempString = "";
+let dataInterval;
 
 const portOpen = () => {
     console.log("Connection is now ready!");
@@ -73,6 +74,9 @@ const writeSerialData = (hexArray) => {
     });
 }
 
+const stopInterval = (interval) => {
+    clearInterval(interval);
+}
 
 // when the connection is ready
 device.on("open", portOpen);
