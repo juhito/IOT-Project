@@ -42,7 +42,8 @@ Register 0x09 -> [0x3C, 0x09, 0x3E]
 
 
 // import the required library to make serial connections
-const serial = require("serialport");
+import serial from "serialport";
+import { getData, postData } from "./connect.js";
 
 // instantiate connection to the device
 const device = new serial("COM3", {
@@ -52,18 +53,29 @@ const device = new serial("COM3", {
     stopBits: 1
 });
 
-// when we receive data from the device
-device.on("data", (data) => {
-    console.log("Data: " + data);
-})
+let tempString = "";
+
+const portOpen = () => {
+    console.log("Connection is now ready!");
+    dataInterval = setInterval(() => {
+        writeSerialData([0x3C, 0x01, 0x3E]);
+    }, 1000);
+}
+
+const readSerialData = (data) => {
+    tempString = tempString.concat('', data.toString());
+    console.log(tempString);
+}
+
+const writeSerialData = (hexArray) => {
+    device.write(hexArray, (err) => {
+        if(err) console.log(err);
+    });
+}
+
 
 // when the connection is ready
-device.on("open", () => {
-    // send data as hex sequence
-    device.write([0x3C, 0x01, 0x3E], (err) => {
-        if(err) 
-            console.log("Error on write: ", err.message);
-    
-        console.log("message written");
-    })
-});
+device.on("open", portOpen);
+
+// pull data from internal buffer, returns null if no data is available
+device.on("data", (data) => {readSerialData(data)});
