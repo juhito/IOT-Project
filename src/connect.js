@@ -11,15 +11,29 @@ const apiURL = "https://my.iot-ticket.com/api/v1";
 const authToken = "Basic " + Buffer.from(username + ":" + password).toString("base64");
 
 // send a get request using fetch
-const response = await fetch(`${apiURL}/devices`, {
-    method: "GET",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": authToken
-    }
-});
+async function getData(endpoint) {
+    const response = await fetch(`${apiURL}/${endpoint}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": authToken
+        }
+    });
+    
+    return response.json();
+}
 
-// await response from fetch
-const data = await response.json();
+async function postData(endpoint, data) {
+    const response = await fetch(`${apiURL}/${endpoint}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": authToken
+        },
+        body: JSON.stringify(data)
+    })
 
-console.log(data);
+    return response.json();
+}
+
+export { getData, postData };
