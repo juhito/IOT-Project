@@ -37,3 +37,33 @@ Received Data is between 0-1023 on register 0x01
 ```sh
 120
 ```
+
+# Setting up
+1. Clone this repo
+```sh
+git clone https://github.com/juhito/IOT-Project
+```
+2. Download and install.
+```sh
+Node: https://nodejs.org/en/
+Uart Drivers: https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers
+```
+3. Run
+```sh
+cd iot-project/
+
+npm install
+```
+in command prompt.
+
+4. Credentials are required to access Wapice's IOT-Ticket and they are located in the projects root dir in a .env file.
+Create this file.
+```sh
+WAPICE_USERNAME=xxxx
+WAPICE_PASSWORD=xxxx
+WAPICE_DEVICEID=xxxx
+```
+5. Starting the application
+```sh
+npm run dev
+```
