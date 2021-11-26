@@ -71,66 +71,10 @@ ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timesta
 // import the required library to make serial connections
 import serial from "serialport";
 import dotenv from "dotenv/config";
-import { getData, postData } from "./connect.js";
+import { LightSensor } from "./sensor.js";
+import { getData, postData } from "./helpers.js";
 
-// instantiate connection to the device
-const device = new serial("COM3", {
-    baudRate: 9600,
-    parity: "none",
-    dataBits: 8,
-    stopBits: 1
-});
-
-const intervalRate = 1000;
-const threshold = 100;
 const hexData = [0x3C, 0x01, 0x3E];
-const deviceId = process.env.WAPICE_DEVICEID;
 
-let tempString = "";
-let dataInterval;
-
-const portOpen = () => {
-    console.log("Connection is now ready!");
-    dataInterval = setInterval(() => {
-        writeSerialData();
-    }, intervalRate);
-}
-
-const readSerialData = (data) => {
-    tempString = tempString.concat('', data.toString());
-}
-
-const analyzeSerialData = async () => {
-    if(tempString != "" && parseInt(tempString) < threshold) {
-        console.log("Data lower than 100: " + tempString);
-
-        const response = await postData(`process/write/${deviceId}`, [{
-            "name": "Light Intensity",
-            "v": parseInt(tempString),
-            "unit": "cd",
-            "dataType": "double"
-        }]);
-
-        console.log(response);
-    }
-    tempString = "";
-}
-
-const writeSerialData = () => {
-    analyzeSerialData();
-    
-    device.write(hexData, (err) => {
-        if(err) console.log(err);
-        console.log("message written");
-    });
-}
-
-const stopInterval = (interval) => {
-    clearInterval(interval);
-}
-
-// when the connection is ready
-device.on("open", portOpen);
-
-// pull data from internal buffer, returns null if no data is available
-device.on("data", (data) => {readSerialData(data)});
+const sensor = new LightSensor();
+await sensor.init();
