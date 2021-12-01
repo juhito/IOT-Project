@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import serial from "serialport";
 import dotenv from "dotenv/config";
 
 // get credentials from env variables
@@ -48,4 +49,19 @@ async function postData(endpoint, data) {
     return response.json();
 }
 
-export { getData, postData };
+
+async function findDevice(deviceId) {
+    const deviceList = await serial.list();
+    let tempDevice = null;
+    deviceList.forEach(device => {
+        if(device.productId === deviceId) {
+            console.log(`Found device ${deviceId} on port ${device.path}!`);
+            tempDevice = device;
+            return;
+        }
+    });
+
+    return tempDevice.path;
+}
+
+export { getData, postData, findDevice };

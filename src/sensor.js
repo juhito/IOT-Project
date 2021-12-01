@@ -1,64 +1,67 @@
 import serial from "serialport";
+import dotenv from "dotenv/config";
+import { postData } from "./helpers.js";
 
 class LightSensor {
-    device = null;
-    sensorData = null;
+    #device;
+    #sensorData = null;
+    wapice_deviceId = process.env.WAPICE_DEVICEID;
 
-    constructor() {
-
-    }
-
-    async init() {
-        const devicePath = await this.findDevice("EA60");
-        
+    constructor(devicePath) {
         if(devicePath === null) {
             console.log("Device not found, exiting...");
             process.exit(1);
         }
 
-        this.device = new serial(devicePath, {
+        this.#device = new serial(devicePath, {
             baudRate: 9600,
             parity: "none",
             dataBits: 8,
             stopBits: 1
         });
 
-        this.device.on("open", () => console.log("Connection is now ready and open!"));
+        this.#device.setEncoding('utf8');
     }
 
-    async findDevice(deviceId) {
-        const deviceList = await serial.list();
-        let tempDevice = null;
-        deviceList.forEach(device => {
-            if(device.productId === deviceId) {
-                console.log(`Found device ${deviceId} on port ${device.path}!`);
-                tempDevice = device;
-                return;
-            }
-        });
-    
-        return tempDevice.path;
-    }
+    get getDevice() { return this.#device; }
+    get sensorData() { return this.#sensorData; }
 
     readData() {
-        this.device.on("data", (data) => {
+        const data = this.#device.read();
 
-        })
+        if(data != null) {
+            this.#sensorData = data;
+        }
     }
 
     writeData(hexData) {
+        if(this.#device.isOpen) {
+            this.#device.write(hexData, (err) => {
+                if(err) {
+                    console.log(`Error: ${err}`);
+                    return;
+                }
+                else {
+                    console.log("wrote data");
+                }
+            });
+        }
+        else {
+            console.log("Device connection isn't ready, can't send data!");
+            return;
+        }
     }
 
-    sendData() {
-        /*
-        const response = await postData(`process/write/${deviceId}`, [{
+    async sendData() {
+        const response = await postData(`process/write/${this.wapice_deviceId}`, [{
             "name": "Light Intensity",
-            "v": parseInt(tempString),
+            "v": this.#sensorData,
             "unit": "cd",
             "dataType": "double"
-        }]);*/
-    }
+        }]);
 
+        return response;
+    }
 }
 
 export { LightSensor };
