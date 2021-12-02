@@ -9,7 +9,7 @@ class LightSensor {
 
     constructor(devicePath) {
         if(devicePath === null) {
-            console.log("Device not found, exiting...");
+            console.log(`Path is null, exiting...`);
             process.exit(1);
         }
 
@@ -55,7 +55,7 @@ class LightSensor {
     async sendData() {
         const response = await postData(`process/write/${this.wapice_deviceId}`, [{
             "name": "Light Intensity",
-            "v": this.#sensorData,
+            "v": parseInt(this.#sensorData),
             "unit": "cd",
             "dataType": "double"
         }]);

@@ -67,21 +67,18 @@ ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timesta
 
 */
 
-
-// import the required library to make serial connections
-import { findDevice } from "./helpers.js";
+import { findDevice, REGISTERCOMMANDS as reg } from "./helpers.js";
 import { LightSensor } from "./sensor.js";
 
-const hexData = [0x3C, 0x01, 0x3E];
+const hexData = reg.READ_LIGHT_DATA;
 const devicePath = await findDevice("EA60");
 const sensor = new LightSensor(devicePath);
 
 setInterval(() => {
-
     sensor.readData();
     console.log(sensor.sensorData);
 
-    if(sensor.sensorData < 100) { console.log("OMG HARAKIRI!!!!"); }
+    if(sensor.sensorData < 100) { console.log("sensor data below 100 omfg!"); }
 
     sensor.writeData(hexData);
 }, 1000);

@@ -11,6 +11,12 @@ const apiURL = "https://my.iot-ticket.com/api/v1";
 // generate a basic http auth token
 const authToken = "Basic " + Buffer.from(username + ":" + password).toString("base64");
 
+const REGISTERCOMMANDS = {
+    READ_LIGHT_DATA: [0x3C, 0x01, 0x3E],
+    READ_TEMP_DATA: [0x3C, 0x02, 0x3E],
+    REBOOT: [0x3C, 0x08, 0x3E]
+};
+
 /**
  * Get Data from Wapice IOT-Ticket API, returns the data as json.
  * 
@@ -49,7 +55,13 @@ async function postData(endpoint, data) {
     return response.json();
 }
 
-
+/**
+ * Uses serialport.list() which retrieves all available ports with metadata and then
+ * loops over that list to find the given device. 
+ * 
+ * @param {string} deviceId ID of the device you're looking for.
+ * @returns {Promise<string>} Path to the port
+ */
 async function findDevice(deviceId) {
     const deviceList = await serial.list();
     let tempDevice = null;
@@ -61,7 +73,8 @@ async function findDevice(deviceId) {
         }
     });
 
-    return tempDevice.path;
+    if(tempDevice === null) console.log(`Couldn't find device with id ${deviceId}`); 
+    return tempDevice !== null ? tempDevice.path : null;
 }
-
-export { getData, postData, findDevice };
+    
+export { getData, postData, findDevice, REGISTERCOMMANDS };
