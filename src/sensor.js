@@ -31,15 +31,6 @@ class LightSensor {
     }
 
     /**
-     * Get the device.
-     * 
-     * @returns {serial} The device itself.
-     */
-    get getDevice() { 
-        return this.#device; 
-    }
-
-    /**
      * Get the current sensor data.
      * 
      * @returns {string} Current sensor data.
