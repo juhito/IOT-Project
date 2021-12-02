@@ -73,8 +73,8 @@ async function findDevice(deviceId) {
         }
     });
 
-    if(tempDevice === null) console.log(`Couldn't find device with id ${deviceId}`); 
-    return tempDevice !== null ? tempDevice.path : null;
+    if(tempDevice === null) throw new Error(`Couldn't find device with id ${deviceId}`);
+    return tempDevice.path;
 }
     
 export { getData, postData, findDevice, REGISTERCOMMANDS };

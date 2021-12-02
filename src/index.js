@@ -71,7 +71,7 @@ import { findDevice, REGISTERCOMMANDS as reg } from "./helpers.js";
 import { LightSensor } from "./sensor.js";
 
 const hexData = reg.READ_LIGHT_DATA;
-const devicePath = await findDevice("EA60");
+const devicePath = await findDevice("EA60").catch(() => null);
 const sensor = new LightSensor(devicePath);
 
 setInterval(() => {
