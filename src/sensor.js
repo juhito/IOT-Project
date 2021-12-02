@@ -1,5 +1,7 @@
 import serial from "serialport";
 import { postData } from "./helpers.js";
+import { Queue } from "./queue.js";
+import { Task } from "./task.js";
 
 import dotenv from "dotenv/config";
 
@@ -7,6 +9,7 @@ import dotenv from "dotenv/config";
 class LightSensor {
     #device;
     #sensorData = null;
+    #que;
     wapice_deviceId = process.env.WAPICE_DEVICEID;
 
     /**
@@ -28,6 +31,8 @@ class LightSensor {
         });
 
         this.#device.setEncoding('utf8');
+
+        this.#que = new Queue();
     }
 
     /**
@@ -39,16 +44,22 @@ class LightSensor {
         return this.#sensorData; 
     }
 
-
     /**
-     * Reads data from the interal buffer and stores it.
+     * Reads data from the internal buffer and stores it.
      */
     readData() {
         const data = this.#device.read();
 
         if(data != null) {
-            this.#sensorData = data;
+            if(parseInt(data) < 100) {
+                console.log("Generating task...");
+                let ts = Math.floor(new Date().getTime() / 1000); // GENERATE EPOCH TIMESTAMP
+                this.#que.send(new Task(data, ts));
+            }
         }
+
+
+        console.log(this.#que);
     }
 
     /**
@@ -78,7 +89,7 @@ class LightSensor {
     /**
      * Sends the current sensor data to IOT-Ticket.
      * 
-     * @returns {Promise<string>} Response from api.
+     * @returns {Promise<Object>} Response from api.
      */
     async sendData() {
         const response = await postData(`process/write/${this.wapice_deviceId}`, [{
