@@ -1,6 +1,6 @@
 {
   "name": "iot-project",
-  "version": "0.0.1",
+  "version": "0.5",
   "type": "module",
   "description": "Determine trespassing with a light sensor and a laser pointer",
   "main": "index.js",
@@ -12,7 +12,6 @@
   "license": "GPL-3.0",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "jest": "^27.3.1",
     "node-fetch": "^3.0.0",
     "serialport": "^9.2.4"
   }
