@@ -2,7 +2,7 @@ class Task {
     data;
     timestamp;
 
-    constructor(data, timestamp, importance) {
+    constructor(data, timestamp) {
         this.data = data;
         this.timestamp = timestamp;
     }
