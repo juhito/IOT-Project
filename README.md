@@ -6,20 +6,19 @@ We are using a light sensor and a laser pointer to determine if an area was tres
 
 The sensor itself has 9 different registers with most of them read only. Receiving data from the device is simple, send it some hex in the form of <0x00-0xff> and it answers. After we receive the data, we send it to Wapice IOT-Ticket where we analyze it and make further steps.
 
-This git page is only for the code in which we make the connection to the sensor and receive and send data forward.
-
 # Requirements
 - Light sensor from Techat Oy
+- Wireless Dongle from Techat Oy
 - Drivers from https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers
     - Drivers are required for device operation as a Virtual COM Port to facilitate host communication with CP210x products.
 - System with Nodejs v14 and Internet Connection.
+- Access to Wapice IOT-Ticket.
 
 # Technologies
 - Node.js
     - Serialport v9.2.4 (https://www.npmjs.com/package/serialport)
     - Node-fetch v3.0.0 (https://www.npmjs.com/package/node-fetch)
     - Dotenv v10.0.0 (https://www.npmjs.com/package/dotenv)
-- REST
 - Wapice IOT-Ticket
 
 # Hardware
