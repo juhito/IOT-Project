@@ -1,5 +1,6 @@
-import fetch from "node-fetch";
 import serial from "serialport";
+import fetch from "node-fetch";
+
 import dotenv from "dotenv/config";
 
 // get credentials from env variables
@@ -21,7 +22,7 @@ const REGISTERCOMMANDS = {
  * Get Data from Wapice IOT-Ticket API, returns the data as json.
  * 
  * @param {string} endpoint The endpoint where to pull data from.
- * @return {json} Detailed response from API as json.
+ * @return {Promise<Object>} Detailed response from API as json.
  */
 async function getData(endpoint) {
     const response = await fetch(`${apiURL}/${endpoint}`, {
@@ -39,8 +40,8 @@ async function getData(endpoint) {
  * Post Data to Wapice IOT-Ticket API, returns a detailed response as json.
  * 
  * @param {string} endpoint The endpoint where to send the data.
- * @param {object} data Complete object with required values.
- * @return {json} Detailed response from API as json.
+ * @param {Object} data Complete object with required values.
+ * @return {Promise<Object>} Detailed response from API as json.
  */
 async function postData(endpoint, data) {
     const response = await fetch(`${apiURL}/${endpoint}`, {

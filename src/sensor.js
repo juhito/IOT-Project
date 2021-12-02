@@ -1,12 +1,19 @@
 import serial from "serialport";
-import dotenv from "dotenv/config";
 import { postData } from "./helpers.js";
 
+import dotenv from "dotenv/config";
+
+/** Class representing a sensor device. */
 class LightSensor {
     #device;
     #sensorData = null;
     wapice_deviceId = process.env.WAPICE_DEVICEID;
 
+    /**
+     * Create a sensor and instantiate the connection.
+     * 
+     * @param {string} devicePath Path of the port.
+     */
     constructor(devicePath) {
         if(devicePath === null) {
             console.log(`Path is null, exiting...`);
@@ -23,9 +30,28 @@ class LightSensor {
         this.#device.setEncoding('utf8');
     }
 
-    get getDevice() { return this.#device; }
-    get sensorData() { return this.#sensorData; }
+    /**
+     * Get the device.
+     * 
+     * @returns {serial} The device itself.
+     */
+    get getDevice() { 
+        return this.#device; 
+    }
 
+    /**
+     * Get the current sensor data.
+     * 
+     * @returns {string} Current sensor data.
+     */
+    get sensorData() { 
+        return this.#sensorData; 
+    }
+
+
+    /**
+     * Reads data from the interal buffer and stores it.
+     */
     readData() {
         const data = this.#device.read();
 
@@ -34,6 +60,12 @@ class LightSensor {
         }
     }
 
+    /**
+     * Writes data to the device.
+     * 
+     * @param {number[]} hexData Number array containing the hex command.
+     * @returns {void} nothing yet
+     */
     writeData(hexData) {
         if(this.#device.isOpen) {
             this.#device.write(hexData, (err) => {
@@ -52,6 +84,11 @@ class LightSensor {
         }
     }
 
+    /**
+     * Sends the current sensor data to IOT-Ticket.
+     * 
+     * @returns {Promise<string>} Response from api.
+     */
     async sendData() {
         const response = await postData(`process/write/${this.wapice_deviceId}`, [{
             "name": "Light Intensity",
