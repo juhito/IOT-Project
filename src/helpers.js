@@ -66,6 +66,7 @@ async function postData(endpoint, data) {
 async function findDevice(deviceId) {
     const deviceList = await serial.list();
     let tempDevice = null;
+    
     deviceList.forEach(device => {
         if(device.productId === deviceId) {
             console.log(`Found device ${deviceId} on port ${device.path}!`);

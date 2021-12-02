@@ -75,10 +75,6 @@ const devicePath = await findDevice("EA60").catch(() => null);
 const sensor = new LightSensor(devicePath);
 
 setInterval(() => {
-    sensor.readData();
-    console.log(sensor.sensorData);
-
-    if(sensor.sensorData < 100) { console.log("sensor data below 100 omfg!"); }
-
     sensor.writeData(hexData);
+    sensor.readData();
 }, 1000);
