@@ -1,6 +1,6 @@
 {
   "name": "iot-project",
-  "version": "0.5",
+  "version": "0.0.5",
   "type": "module",
   "description": "Determine trespassing with a light sensor and a laser pointer",
   "main": "index.js",
