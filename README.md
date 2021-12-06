@@ -19,6 +19,7 @@ The sensor itself has 9 different registers with most of them read only. Receivi
     - Serialport v9.2.4 (https://www.npmjs.com/package/serialport)
     - Node-fetch v3.0.0 (https://www.npmjs.com/package/node-fetch)
     - Dotenv v10.0.0 (https://www.npmjs.com/package/dotenv)
+    - Socket.IO v4.4.0 (https://www.npmjs.com/package/socket.io)
 - Wapice IOT-Ticket
 
 # Hardware
