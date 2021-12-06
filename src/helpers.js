@@ -65,18 +65,13 @@ async function postData(endpoint, data) {
  */
 async function findDevice(deviceId) {
     const deviceList = await serial.list();
-    let tempDevice = null;
-    
-    deviceList.forEach(device => {
-        if(device.productId === deviceId) {
-            console.log(`Found device ${deviceId} on port ${device.path}!`);
-            tempDevice = device;
-            return;
-        }
-    });
 
-    if(tempDevice === null) throw new Error(`Couldn't find device with id ${deviceId}`);
-    return tempDevice.path;
+    const device = deviceList.find(d => d.productId === deviceId);
+
+    if(device === undefined) throw new Error(`Couldn't find device with id ${deviceId}`);
+    else console.log(`Found device ${deviceId} on port ${device.path}!`);
+
+    return device.path;
 }
     
 export { getData, postData, findDevice, REGISTERCOMMANDS };
