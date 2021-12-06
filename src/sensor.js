@@ -1,16 +1,10 @@
 import serial from "serialport";
 import { postData } from "./helpers.js";
-import { Queue } from "./queue.js";
-import { Task } from "./task.js";
-
-import dotenv from "dotenv/config";
 
 /** Class representing a sensor device. */
 class LightSensor {
     #device;
-    #sensorData = null;
-    #que;
-    wapice_deviceId = process.env.WAPICE_DEVICEID;
+    #wapice_deviceId = process.env.WAPICE_DEVICEID;
 
     /**
      * Create a sensor and instantiate the connection.
@@ -31,8 +25,6 @@ class LightSensor {
         });
 
         this.#device.setEncoding('utf8');
-
-        this.#que = new Queue();
     }
 
     /**
@@ -44,22 +36,22 @@ class LightSensor {
         return this.#sensorData; 
     }
 
+    printQueue() {
+        console.log(this.#que);
+    }
+
     /**
      * Reads data from the internal buffer and stores it.
      */
     readData() {
         const data = this.#device.read();
-
+        console.log("Data read: " + data);
         if(data != null) {
             if(parseInt(data) < 100) {
-                console.log("Generating task...");
                 let ts = Math.floor(new Date().getTime() / 1000); // GENERATE EPOCH TIMESTAMP
-                this.#que.send(new Task(data, ts));
+                
             }
         }
-
-
-        console.log(this.#que);
     }
 
     /**
@@ -76,7 +68,7 @@ class LightSensor {
                     return;
                 }
                 else {
-                    console.log("wrote data");
+                    console.log("wrote data!");
                 }
             });
         }
@@ -91,7 +83,8 @@ class LightSensor {
      * 
      * @returns {Promise<Object>} Response from api.
      */
-    async sendData() {
+    sendData() {
+/*
         const response = await postData(`process/write/${this.wapice_deviceId}`, [{
             "name": "Light Intensity",
             "v": parseInt(this.#sensorData),
@@ -99,7 +92,7 @@ class LightSensor {
             "dataType": "double"
         }]);
 
-        return response;
+        return response;*/
     }
 }
 
