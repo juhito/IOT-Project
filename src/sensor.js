@@ -4,7 +4,9 @@ import { postData } from "./helpers.js";
 /** Class representing a sensor device. */
 class LightSensor {
     #device;
-    #wapice_deviceId = process.env.WAPICE_DEVICEID;
+
+    #CURRENT_DATA_SEND = 0;
+    #MAX_DATA_SEND = 10;
 
     /**
      * Create a sensor and instantiate the connection.
@@ -28,19 +30,6 @@ class LightSensor {
     }
 
     /**
-     * Get the current sensor data.
-     * 
-     * @returns {string} Current sensor data.
-     */
-    get sensorData() { 
-        return this.#sensorData; 
-    }
-
-    printQueue() {
-        console.log(this.#que);
-    }
-
-    /**
      * Reads data from the internal buffer and stores it.
      */
     readData() {
@@ -48,8 +37,19 @@ class LightSensor {
         console.log("Data read: " + data);
         if(data != null) {
             if(parseInt(data) < 100) {
+                this.#CURRENT_DATA_SEND++;
                 let ts = Math.floor(new Date().getTime() / 1000); // GENERATE EPOCH TIMESTAMP
                 
+                // if sensor value stays low long enough, stop spamming. 
+                if(this.#CURRENT_DATA_SEND <= this.#MAX_DATA_SEND) {
+                    // send data
+                }
+                else { // stop sending data until sensor value something something
+                    
+                }   
+            }
+            else {
+                this.#CURRENT_DATA_SEND = 0;
             }
         }
     }
@@ -63,12 +63,16 @@ class LightSensor {
     writeData(hexData) {
         if(this.#device.isOpen) {
             this.#device.write(hexData, (err) => {
+                /*
+                According to the stream docs, write errors don't always provide the error in the callback; 
+                sometimes they use the error event.
+
+                If an error occurs, the callback may or may not be called with the error as its first argument. 
+                To reliably detect write errors, add a listener for the 'error' event.
+                */
                 if(err) {
                     console.log(`Error: ${err}`);
                     return;
-                }
-                else {
-                    console.log("wrote data!");
                 }
             });
         }
