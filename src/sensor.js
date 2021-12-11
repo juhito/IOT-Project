@@ -4,10 +4,6 @@ import { postData } from "./helpers.js";
 /** Class representing a sensor device. */
 class LightSensor {
     #device;
-
-    #CURRENT_DATA_SEND = 0;
-    #MAX_DATA_SEND = 10;
-
     /**
      * Create a sensor and instantiate the connection.
      * 
@@ -27,31 +23,32 @@ class LightSensor {
         });
 
         this.#device.setEncoding('utf8');
+        this._pauseSensor = false;
     }
 
     /**
-     * Reads data from the internal buffer and stores it.
+     * Pauses the sensor
+     */
+    togglePause() {
+        this._pauseSensor = !this._pauseSensor;
+    }
+
+    /**
+     * Get's the current state of sensor.
+     * 
+     * @returns {boolean} boolean value represeting current state of sensor.
+     */
+    get pauseSensor() {
+        return this._pauseSensor;
+    }
+
+    /**
+     * Reads data from the internal buffer.
+     * 
+     * @returns {string | null} a string or if buffer is empty, null.
      */
     readData() {
-        const data = this.#device.read();
-        console.log("Data read: " + data);
-        if(data != null) {
-            if(parseInt(data) < 100) {
-                this.#CURRENT_DATA_SEND++;
-                let ts = Math.floor(new Date().getTime() / 1000); // GENERATE EPOCH TIMESTAMP
-                
-                // if sensor value stays low long enough, stop spamming. 
-                if(this.#CURRENT_DATA_SEND <= this.#MAX_DATA_SEND) {
-                    // send data
-                }
-                else { // stop sending data until sensor value something something
-                    
-                }   
-            }
-            else {
-                this.#CURRENT_DATA_SEND = 0;
-            }
-        }
+        return this.#device.read();
     }
 
     /**
@@ -80,23 +77,6 @@ class LightSensor {
             console.log("Device connection isn't ready, can't send data!");
             return;
         }
-    }
-
-    /**
-     * Sends the current sensor data to IOT-Ticket.
-     * 
-     * @returns {Promise<Object>} Response from api.
-     */
-    sendData() {
-/*
-        const response = await postData(`process/write/${this.wapice_deviceId}`, [{
-            "name": "Light Intensity",
-            "v": parseInt(this.#sensorData),
-            "unit": "cd",
-            "dataType": "double"
-        }]);
-
-        return response;*/
     }
 }
 
