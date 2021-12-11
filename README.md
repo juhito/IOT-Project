@@ -13,13 +13,14 @@ The sensor itself has 9 different registers with most of them read only. Receivi
     - Drivers are required for device operation as a Virtual COM Port to facilitate host communication with CP210x products.
 - System with Nodejs v14 and Internet Connection.
 - Access to Wapice IOT-Ticket.
+- Firebase account with a working project&database.
 
 # Technologies
 - Node.js
     - Serialport v9.2.4 (https://www.npmjs.com/package/serialport)
     - Node-fetch v3.0.0 (https://www.npmjs.com/package/node-fetch)
     - Dotenv v10.0.0 (https://www.npmjs.com/package/dotenv)
-    - Socket.IO v4.4.0 (https://www.npmjs.com/package/socket.io)
+    - Firebase-admin v10.0.0 (https://www.npmjs.com/package/firebase-admin)
 - Wapice IOT-Ticket
 
 # Hardware
@@ -56,13 +57,8 @@ npm install
 ```
 in command prompt.
 
-4. Credentials are required to access Wapice's IOT-Ticket and they are located in the projects root dir in a .env file.
-Create this file.
-```sh
-WAPICE_USERNAME=xxxx
-WAPICE_PASSWORD=xxxx
-WAPICE_DEVICEID=xxxx
-```
+4. Credentials are required to access Wapice's IOT-Ticket and they are located in the projects root dir in a **.env** file. This file isn't included as it contains sensitive information and you should create this file yourself or contact me for more information.
+
 5. Starting the application
 ```sh
 npm run dev
