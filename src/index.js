@@ -67,36 +67,22 @@ ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timesta
 
 */
 
-import { Server } from "socket.io";
-
 import { findDevice, REGISTERCOMMANDS as reg } from "./helpers.js";
 import { LightSensor } from "./sensor.js";
-
-const io = new Server();
+import { FCM } from "./fcm.js";
 
 const hexData = reg.READ_LIGHT_DATA;
 const devicePath = await findDevice("EA60").catch(() => null);
 const sensor = new LightSensor(devicePath);
+const fb = new FCM();
 
-let PAUSE_SENSOR = false;
+fb.listenForPauseRequests(sensor);
 
 setInterval(() => {
-    if(!PAUSE_SENSOR) {
+    if(!sensor.pauseSensor) {
         sensor.writeData(hexData);
-        sensor.readData();
+        const data = sensor.readData();
+
+        console.log("Data: " + data);
     }
 }, 1000);
-
-io.on("connection", (socket) => {
-    console.log(`New connection from: ${socket.handshake.address}`);
-
-    socket.on("message", (data) => {
-        if(data === process.env.PAUSE_SENSOR_MSG) {
-            if(!PAUSE_SENSOR) console.log("PAUSING SENSOR!");
-            else console.log("RESUMING SENSOR!");
-            PAUSE_SENSOR = !PAUSE_SENSOR;
-        }
-    });
-});
-
-io.listen(3000);
