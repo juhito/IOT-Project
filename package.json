@@ -11,10 +11,9 @@
   "author": "juhito",
   "license": "GPL-3.0",
   "dependencies": {
-    "async": "^3.2.2",
     "dotenv": "^10.0.0",
+    "firebase-admin": "^10.0.0",
     "node-fetch": "^3.0.0",
-    "serialport": "^9.2.4",
-    "socket.io": "^4.4.0"
+    "serialport": "^9.2.4"
   }
 }
