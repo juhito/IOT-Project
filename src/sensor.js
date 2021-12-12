@@ -45,7 +45,7 @@ class LightSensor {
     /**
      * Reads data from the internal buffer.
      * 
-     * @returns {string | null} a string or if buffer is empty, null.
+     * @returns {string | null} a string or if no data is available, null.
      */
     readData() {
         return this.#device.read();
