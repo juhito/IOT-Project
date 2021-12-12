@@ -19,7 +19,7 @@ class FCM {
     }
 
     listenForPauseRequests(sensor) {
-        const requests = this.#db.ref().child("pauseRequests");
+        const requests = this.#db.ref().child("users/pauseRequests");
         requests.on("child_added", (requestSnapshot) => {
             const request = requestSnapshot.val();
             let obj = {};
