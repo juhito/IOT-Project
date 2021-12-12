@@ -67,7 +67,7 @@ ts -> Unix Timestamp. The number of milliseconds since the Epoch. When a timesta
 
 */
 
-import { findDevice, REGISTERCOMMANDS as reg } from "./helpers.js";
+import { findDevice, postData, REGISTERCOMMANDS as reg } from "./helpers.js";
 import { LightSensor } from "./sensor.js";
 import { FCM } from "./fcm.js";
 
@@ -76,13 +76,51 @@ const devicePath = await findDevice("EA60").catch(() => null);
 const sensor = new LightSensor(devicePath);
 const fb = new FCM();
 
+const data_list = [];
+
+const MAX_SEND_QUOTA = 10;
+let CURRENT_SEND_COUNT = 0;
+
 fb.listenForPauseRequests(sensor);
 
 setInterval(() => {
     if(!sensor.pauseSensor) {
         sensor.writeData(hexData);
         const data = sensor.readData();
-
         console.log("Data: " + data);
+
+        if(data != null) {
+            if(parseInt(data) < 100) {
+                if(CURRENT_SEND_COUNT < MAX_SEND_QUOTA) {
+
+                    data_list.push({
+                        "name": "Light Intensity",
+                        "v": parseInt(data),
+                        "ts": Date.now(),
+                        "unit": "cd"
+                    });
+
+                    CURRENT_SEND_COUNT++;
+                }
+                else {
+                    console.log("MAX QUOTA REACHED!");
+                }
+            }
+            else {
+                CURRENT_SEND_COUNT = 0;
+            }
+        }
     }
-}, 1000);
+}, 100);
+
+setInterval(async () => {
+    const obj = data_list.shift();
+    if(obj != undefined) {
+        console.log(obj);
+        await postData(`process/write/${process.env.WAPICE_DEVICEID}`, [
+            obj
+        ]).then((data) => {
+            console.log(data);
+        });
+    }
+}, 5000);
