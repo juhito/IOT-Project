@@ -20,8 +20,8 @@ class FCM {
 
     listenForPauseRequests(sensor) {
         const requests = this.#db.ref().child("users/pauseRequests");
+
         requests.on("child_added", (requestSnapshot) => {
-            const request = requestSnapshot.val();
             let obj = {};
 
             sensor.togglePause();
@@ -37,9 +37,9 @@ class FCM {
 
             getMessaging().send({
                 notification: obj,
-                token: request.token
+                topic: process.env.SUBSCRIBED_TOPIC
             }).then((data) => {
-                console.log("Sending notification back to user, removing from db!");
+                console.log("Sending notification back to topic, removing from db!");
                 requestSnapshot.ref.remove();
             }).catch((error) => {
                 console.log(error);
