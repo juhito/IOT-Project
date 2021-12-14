@@ -8,6 +8,10 @@ class FCM {
     #fb_config;
     #db;
     
+    /**
+     * Initializes connection with Google Firebase
+     * 
+     */
     constructor() {
         this.#fb_config = JSON.parse(fs.readFileSync(process.env.FCM_CONFIG_PATH));
 
@@ -19,6 +23,11 @@ class FCM {
         this.#db = fb.database(fb);
     }
 
+    /**
+     * Listen for pause requests from Firebase.
+     * 
+     * @param {LightSensor} sensor object for getting and updating current state of the sensor.
+     */
     listenForPauseRequests(sensor) {
         const requests = this.#db.ref().child("users/pauseRequests");
 
@@ -50,6 +59,11 @@ class FCM {
 
     }
 
+    /**
+     * Listen for state update requests from Firebase.
+     * 
+     * @param {LightSensor} sensor object for getting current state of the sensor.
+     */
     listenForStateRequests(sensor) {
         const requests = this.#db.ref().child("users/stateRequests");
 
