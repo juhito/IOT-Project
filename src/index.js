@@ -82,8 +82,10 @@ const MAX_SEND_QUOTA = 10;
 let CURRENT_SEND_COUNT = 0;
 
 fb.listenForPauseRequests(sensor);
+fb.listenForStateRequests(sensor);
 
 setInterval(() => {
+    console.log(sensor.pauseSensor);
     if(!sensor.pauseSensor) {
         sensor.writeData(hexData);
         const data = sensor.readData();
@@ -92,7 +94,6 @@ setInterval(() => {
         if(data != null) {
             if(parseInt(data) < 100) {
                 if(CURRENT_SEND_COUNT < MAX_SEND_QUOTA) {
-
                     data_list.push({
                         "name": "Light Intensity",
                         "v": parseInt(data),
