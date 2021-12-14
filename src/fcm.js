@@ -1,6 +1,7 @@
 import fb from "firebase-admin";
 import { getMessaging } from "firebase-admin/messaging";
 import fs from "fs";
+import { request } from "http";
 
 /** Class representing communication with Google Firebase */
 class FCM {
@@ -37,9 +38,27 @@ class FCM {
 
             getMessaging().send({
                 notification: obj,
-                topic: process.env.SUBSCRIBED_TOPIC
+                data: { state: sensor.pauseSensor.toString() },
+                token: requestSnapshot.val().token
             }).then((data) => {
-                console.log("Sending notification back to topic, removing from db!");
+                console.log("Sending notification back to token, removing from db!");
+                requestSnapshot.ref.remove();
+            }).catch((error) => {
+                console.log(error);
+            });
+        });
+
+    }
+
+    listenForStateRequests(sensor) {
+        const requests = this.#db.ref().child("users/stateRequests");
+
+        requests.on("child_added", (requestSnapshot) => {
+            getMessaging().send({
+                data: { state: sensor.pauseSensor.toString() },
+                token: requestSnapshot.val().token
+            }).then((data) => {
+                console.log("Sending state back to user, removing from db!");
                 requestSnapshot.ref.remove();
             }).catch((error) => {
                 console.log(error);
@@ -47,6 +66,5 @@ class FCM {
         });
     }
 };
-
 
 export { FCM };
