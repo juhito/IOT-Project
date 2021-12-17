@@ -6,6 +6,8 @@ We are using a light sensor and a laser pointer to determine if an area was tres
 
 The sensor itself has 9 different registers with most of them read only. Receiving data from the device is simple, send it some hex in the form of <0x00-0xff> and it answers. After we receive the data, we send it to Wapice IOT-Ticket where we analyze it and make further steps.
 
+https://github.com/juhito/IOT-Project-App
+
 # Requirements
 - Light sensor from Techat Oy
 - Wireless Dongle from Techat Oy
